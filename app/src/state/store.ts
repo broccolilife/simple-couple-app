@@ -3,6 +3,7 @@ import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 import { DateTime } from 'luxon';
 import type { GardenPlot, PetInstance, Question } from '../api/supabase';
+import type { WishlistItem } from '../screens/Wishlist';
 
 export type AnswerState = {
   question?: Question | null;
@@ -42,6 +43,8 @@ export type AppState = {
   missions: MissionProgress[];
   premium: PremiumStatus;
   randomEvent?: { message: string; reward?: string; seen: boolean } | null;
+  wishlist: WishlistItem[];
+  anniversaryDate?: string;
   setProfile: (profileId: string, tz: string) => void;
   setCouple: (coupleId: string) => void;
   setQuestion: (question: Question | null) => void;
@@ -55,6 +58,10 @@ export type AppState = {
   queueRandomEvent: (message: string, reward?: string) => void;
   dismissRandomEvent: () => void;
   claimMission: (missionId: number) => void;
+  addWish: (item: WishlistItem) => void;
+  toggleWish: (id: string) => void;
+  removeWish: (id: string) => void;
+  setAnniversaryDate: (date: string) => void;
 };
 
 export const useAppStore = create<AppState>()(
@@ -67,6 +74,8 @@ export const useAppStore = create<AppState>()(
       missions: [],
       premium: 'free',
       randomEvent: null,
+      wishlist: [],
+      anniversaryDate: undefined,
       setProfile: (profileId: string, tz: string) =>
         set((draft) => {
           draft.profileId = profileId;
@@ -133,6 +142,25 @@ export const useAppStore = create<AppState>()(
             mission.status = 'claimed';
           }
         }),
+      addWish: (item: WishlistItem) =>
+        set((draft) => {
+          draft.wishlist.push(item);
+        }),
+      toggleWish: (id: string) =>
+        set((draft) => {
+          const wish = draft.wishlist.find((w) => w.id === id);
+          if (wish) {
+            wish.completed = !wish.completed;
+          }
+        }),
+      removeWish: (id: string) =>
+        set((draft) => {
+          draft.wishlist = draft.wishlist.filter((w) => w.id !== id);
+        }),
+      setAnniversaryDate: (date: string) =>
+        set((draft) => {
+          draft.anniversaryDate = date;
+        }),
     })),
     {
       name: 'lovegarden-store',
@@ -141,6 +169,8 @@ export const useAppStore = create<AppState>()(
         coupleId: state.coupleId,
         tz: state.tz,
         premium: state.premium,
+        wishlist: state.wishlist,
+        anniversaryDate: state.anniversaryDate,
       }),
     },
   ),

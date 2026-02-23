@@ -16,6 +16,7 @@ import {
 } from '../api/supabase';
 import { useAppStore } from '../state/store';
 import { track } from '../lib/analytics';
+import { AnniversaryCountdown } from '../components/AnniversaryCountdown';
 
 const seeds = ['seed.sunflower', 'seed.lavender', 'seed.tulip'];
 
@@ -104,6 +105,7 @@ export const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
+      <AnniversaryCountdown />
       <Text style={styles.heading}>Our Garden</Text>
       <View style={styles.grid}>
         {garden.map((plot) => (

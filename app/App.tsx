@@ -10,6 +10,8 @@ import { WhiteboardScreen } from './src/screens/Whiteboard';
 import { MissionsScreen } from './src/screens/Missions';
 import { CollectionScreen } from './src/screens/Collection';
 import { SettingsScreen } from './src/screens/Settings';
+import { DailyPromptScreen } from './src/screens/DailyPrompt';
+import { WishlistScreen } from './src/screens/Wishlist';
 import { PairingScreen } from './src/screens/Pairing';
 import { useAppStore } from './src/state/store';
 import { useEffect } from 'react';
@@ -27,6 +29,8 @@ const AppTabs = () => (
         const icons: Record<string, keyof typeof Ionicons.glyphMap> = {
           Home: 'ios-planet',
           Question: 'ios-chatbubbles',
+          Prompt: 'ios-sparkles',
+          Wishlist: 'ios-gift',
           Whiteboard: 'ios-brush',
           Missions: 'ios-ribbon',
           Collection: 'ios-leaf',
@@ -39,6 +43,8 @@ const AppTabs = () => (
   >
     <Tab.Screen name="Home" component={HomeScreen} />
     <Tab.Screen name="Question" component={QuestionScreen} />
+    <Tab.Screen name="Prompt" component={DailyPromptScreen} />
+    <Tab.Screen name="Wishlist" component={WishlistScreen} />
     <Tab.Screen name="Whiteboard" component={WhiteboardScreen} />
     <Tab.Screen name="Missions" component={MissionsScreen} />
     <Tab.Screen name="Collection" component={CollectionScreen} />

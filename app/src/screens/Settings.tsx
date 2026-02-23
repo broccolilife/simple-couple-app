@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, Linking, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Alert, Linking, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { PremiumGate } from '../components/PremiumGate';
@@ -10,6 +10,9 @@ export const SettingsScreen = () => {
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const coupleId = useAppStore((state) => state.coupleId);
   const tz = useAppStore((state) => state.tz);
+  const anniversaryDate = useAppStore((state) => state.anniversaryDate);
+  const setAnniversaryDate = useAppStore((state) => state.setAnniversaryDate);
+  const [dateInput, setDateInput] = useState(anniversaryDate ?? '');
 
   const toggleNotifications = async () => {
     const next = !notificationsEnabled;
@@ -36,6 +39,37 @@ export const SettingsScreen = () => {
         <Text style={styles.caption}>Couple ID: {coupleId ?? 'Not paired yet'}</Text>
         <Text style={styles.caption}>Default time zone: {tz}</Text>
         <Button title="Copy invite code" onPress={() => Alert.alert('Invite', 'Share your code securely.')} />
+      </Card>
+      <Card>
+        <Text style={styles.title}>Anniversary Date 💕</Text>
+        <Text style={styles.caption}>Format: YYYY-MM-DD (e.g. 2023-06-15)</Text>
+        <TextInput
+          style={styles.dateInput}
+          placeholder="YYYY-MM-DD"
+          value={dateInput}
+          onChangeText={setDateInput}
+          returnKeyType="done"
+          onSubmitEditing={() => {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateInput)) {
+              setAnniversaryDate(dateInput);
+              Alert.alert('Saved', 'Anniversary date set!');
+            } else {
+              Alert.alert('Invalid', 'Please use YYYY-MM-DD format.');
+            }
+          }}
+        />
+        <Button
+          title="Save date"
+          variant="secondary"
+          onPress={() => {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateInput)) {
+              setAnniversaryDate(dateInput);
+              Alert.alert('Saved', 'Anniversary date set!');
+            } else {
+              Alert.alert('Invalid', 'Please use YYYY-MM-DD format.');
+            }
+          }}
+        />
       </Card>
       <Card>
         <Text style={styles.title}>Privacy</Text>
@@ -80,5 +114,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#475569',
     marginTop: 6,
+  },
+  dateInput: {
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    borderRadius: 12,
+    padding: 12,
+    fontSize: 16,
+    marginTop: 8,
+    marginBottom: 8,
+    backgroundColor: '#FFFFFF',
   },
 });
