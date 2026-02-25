@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
 
 export type ButtonProps = {
   title: string;
@@ -7,17 +7,30 @@ export type ButtonProps = {
   variant?: 'primary' | 'secondary';
   icon?: ReactNode;
   disabled?: boolean;
+  loading?: boolean;
 };
 
-export const Button = ({ title, onPress, variant = 'primary', icon, disabled }: ButtonProps) => (
+export const Button = ({ title, onPress, variant = 'primary', icon, disabled, loading }: ButtonProps) => (
   <Pressable
     accessibilityRole="button"
+    accessibilityState={{ disabled: disabled || loading }}
     onPress={onPress}
-    style={[styles.base, variant === 'secondary' && styles.secondary, disabled && styles.disabled]}
-    disabled={disabled}
+    style={({ pressed }) => [
+      styles.base,
+      variant === 'secondary' && styles.secondary,
+      (disabled || loading) && styles.disabled,
+      pressed && styles.pressed,
+    ]}
+    disabled={disabled || loading}
   >
-    {icon}
-    <Text style={[styles.label, variant === 'secondary' && styles.secondaryLabel]}>{title}</Text>
+    {loading ? (
+      <ActivityIndicator size="small" color={variant === 'secondary' ? '#6C63FF' : '#FFFFFF'} />
+    ) : (
+      icon
+    )}
+    <Text style={[styles.label, variant === 'secondary' && styles.secondaryLabel]}>
+      {loading ? 'Loading…' : title}
+    </Text>
   </Pressable>
 );
 
@@ -37,6 +50,10 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.6,
+  },
+  pressed: {
+    transform: [{ scale: 0.97 }],
+    opacity: 0.9,
   },
   label: {
     color: '#FFFFFF',
