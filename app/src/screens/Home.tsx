@@ -1,3 +1,15 @@
+/**
+ * Home Screen — The main garden view.
+ *
+ * Displays the couple's shared garden grid where partners can plant seeds,
+ * water growing plants, and harvest mature ones. Also shows the virtual pet
+ * and random events (surprise rewards).
+ *
+ * Data flow:
+ * - React Query fetches garden state from Supabase
+ * - Zustand store holds local state + optimistic updates
+ * - Mutations (water, harvest, plant) invalidate queries on success
+ */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';

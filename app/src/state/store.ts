@@ -1,3 +1,16 @@
+/**
+ * Global application state using Zustand with immer (immutable updates)
+ * and persist (AsyncStorage) middleware.
+ *
+ * This store is the single source of truth for all client-side state:
+ * - User profile & couple pairing
+ * - Garden plots (plant, water, harvest lifecycle)
+ * - Virtual pet (feeding, mood)
+ * - Daily question (answer + reveal mechanic)
+ * - Missions (daily/weekly/monthly progress)
+ * - Premium gating (free / trial / premium)
+ * - Random events (surprise rewards)
+ */
 import create from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
